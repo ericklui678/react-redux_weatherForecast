@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchWeather } from '../actions/index';
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -8,9 +11,10 @@ export default class SearchBar extends Component {
     };
     // input onChange property calls this function when input changes
     // HOWEVER, event handlers are NOT bound automatically to component
-    // Event handler functions must state which object it belongs to
+    // Event handler call back functions must state which object it belongs to
       // in this case, the function belongs to THIS object
     this.onInputChange = this.onInputChange.bind(this);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   onInputChange(e) {
@@ -20,6 +24,9 @@ export default class SearchBar extends Component {
   onFormSubmit(e) {
     e.preventDefault(); // prevent browser from submitting form
     // now go fetch weather data
+    this.props.fetchWeather(this.state.term);
+    // reset to empty string on search term
+    this.setState({ term: '' });
   }
 
   render() {
@@ -40,3 +47,11 @@ export default class SearchBar extends Component {
     );
   }
 }
+
+// function to map actions to props and dispatch to all reducers
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchWeather }, dispatch);
+}
+
+// null first argument since mapDispatchToProps is always the 2nd argument
+export default connect(null, mapDispatchToProps)(SearchBar);
