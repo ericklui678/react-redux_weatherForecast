@@ -19,6 +19,8 @@ export function fetchWeather(city) {
         // of same type to reducers
   // tl;dr: redux-promise unpacks promise for us so we can access data we care
     // about from the request
+    // also makes our code cleaner and look synchronous even though it's actually
+      // asynchronous
   return {
     type: FETCH_WEATHER,
     payload: request // remember the request is a promise

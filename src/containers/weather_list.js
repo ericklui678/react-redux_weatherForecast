@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CityChart from '../components/city_chart';
+import GoogleMap from '../components/google_map';
 
 class WeatherList extends Component {
   renderWeather(cityData){
@@ -10,9 +11,14 @@ class WeatherList extends Component {
     const pressure = cityData.list.map(weather => weather.main.pressure);
     const humidity = cityData.list.map(weather => weather.main.humidity);
 
+    const { lon, lat } = cityData.city.coord; // ES6 syntax sugar
+    // equivalent to below...
+    // const lon = cityData.city.coord.lon;
+    // const lat = cityData.city.coord.lat;
+
     return (
       <tr key={name}>
-        <td>{name}</td>
+        <td><GoogleMap lon={lon} lat={lat}/></td>
         <td><CityChart data={temps} color='orange' units='K' /></td>
         <td><CityChart data={pressure} color='blue' units='hPa' /></td>
         <td><CityChart data={humidity} color='green' units='%' /></td>
@@ -44,6 +50,7 @@ class WeatherList extends Component {
 // }
 
 // ES6 syntax sugar, same as above
+// mapStateToProps used to take weather data from redux
 function mapStateToProps({ weather }) {
   return { weather };
 }
